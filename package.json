@@ -1,0 +1,18 @@
+{
+  "name": "noderestdemo",
+  "version": "1.0.0",
+  "description": "api rest using node",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"no test specified\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mariadb": "^2.5.3",
+    "multer": "^1.4.2",
+    "sequelize": "^6.6.2"
+  }
+}
