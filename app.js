@@ -32,13 +32,11 @@ User.init({
   modelName: 'User' // We need to choose the model name
 });
 
-(async () => {
-  await sequelize.sync({ force: true });
-  const u1 = User.build({name: 'Cabesa', age: 23});
-  await u1.save();
-  //console.log(u1);
-})();
-//User.sync({ force: true });
+sequelize.sync({ force: true })
+          .then(result => {
+            const u1 = User.build({name: 'Cabesa', age: 23});
+            u1.save();
+          });
 
 
 
@@ -52,34 +50,32 @@ upload = multer();
 
 // entrypoints
 app.post('/user/', function (req, res) {
-  const newUser = User.build(req.body);
-  newUser.save();
-  res.status(200).send(newUser);
+  User.create(req.body)
+    .then(newUser => {res.send(newUser);})
+    .catch(err => console.log(err));
+
 });
 
 app.get('/user/', function (req, res) {
-  (async () => {
-    const users = await User.findAll();
-    res.send(users);
-  })();
+  User.findAll()
+    .then(users => {res.send(users);})
+    .catch(err => console.log(err));
 });
 
 app.put('/user/', function (req, res) {
-  // pendiente actualizar
-  //const newUser = User.build(req.body);
-  //newUser.save();
-  res.status(200);
+  User.update(req.body, {
+    where: { id: req.body.id }
+    })
+    .then(result => {res.send({updated: result[0]});})
+    .catch(err => {console.log(err)});
 });
 
 app.delete('/user/:id', function (req, res) {
-  (async () => {
-    await User.destroy({
-      where: {
-        id: req.params.id
-      }
-    });
-    res.status(200);
-  })();
+  User.destroy({
+    where: { id: req.params.id }
+    })
+    .then(result => {res.send({deleted: result});})
+    .catch(err => {console.log(err)});
 });
 
 // port config
